@@ -1,8 +1,10 @@
 # floating island
 
-<!-- ## Links
-- [Live](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-- [Github](https://www.youtube.com/watch?v=dQw4w9WgXcQ) -->
+![image](https://github.com/user-attachments/assets/0c158957-d342-4a3f-8fe7-0769da5b144b)
+
+## Links
+- [Live](https://floating-island-threejs.vercel.app/)
+- [Github](https://github.com/atharvadhurwey/floating-island)
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
