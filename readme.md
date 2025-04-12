@@ -1,8 +1,8 @@
 # floating island
 
-## Links
+<!-- ## Links
 - [Live](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
-- [Github](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
+- [Github](https://www.youtube.com/watch?v=dQw4w9WgXcQ) -->
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
