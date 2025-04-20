@@ -67,11 +67,12 @@ export default class Player {
   }
 
   setLights() {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+    // const ambientLight = new THREE.AmbientLight(0x222244, 1)
+    const ambientLight = new THREE.AmbientLight(0x222244, 0.2)
     this.scene.add(ambientLight)
 
     const spotlight = new THREE.SpotLight(0xffffff, 0.9, 0, Math.PI / 4, 10)
-    spotlight.position.set(10, 30, 20)
+    spotlight.position.set(-20, 50, -20)
     spotlight.target.position.set(0, 0, 0)
 
     spotlight.castShadow = true
@@ -84,7 +85,30 @@ export default class Player {
     spotlight.shadow.mapSize.width = 2048
     spotlight.shadow.mapSize.height = 2048
 
-    this.scene.add(spotlight)
+    // this.scene.add(spotlight)
+
+    this.scene.fog = new THREE.Fog("#2e4482", 10, 100)
+    this.scene.background = new THREE.Color("#2e4482") // Light blue sky
+
+    const moonLight = new THREE.DirectionalLight(0xaaaaff, 0.3)
+    moonLight.position.set(-20, 50, -20)
+    this.scene.add(moonLight)
+
+    const moonLightHelper = new THREE.DirectionalLightHelper(moonLight, 5)
+    this.scene.add(moonLightHelper)
+
+    // const cubeTextureLoader = new THREE.CubeTextureLoader()
+    // const environmentMap = cubeTextureLoader.load([
+    //   "/models/EnvMap/nightsky/px.png",
+    //   "/models/EnvMap/nightsky/nx.png",
+    //   "/models/EnvMap/nightsky/py.png",
+    //   "/models/EnvMap/nightsky/ny.png",
+    //   "/models/EnvMap/nightsky/pz.png",
+    //   "/models/EnvMap/nightsky/nz.png",
+    // ])
+    // // this.scene.background = environmentMap
+    // this.scene.environment = environmentMap
+    // this.scene.environmentIntensity = 0.2
   }
 
   setGround() {
@@ -93,11 +117,11 @@ export default class Player {
     this.boxMateiral = new THREE.MeshLambertMaterial({ color: 0x00ff00 })
 
     // Floor
-    const floorGeometry = new THREE.PlaneGeometry(300, 300, 100, 100)
-    floorGeometry.rotateX(-Math.PI / 2)
-    const floor = new THREE.Mesh(floorGeometry, this.material)
-    floor.receiveShadow = true
-    this.scene.add(floor)
+    // const floorGeometry = new THREE.PlaneGeometry(300, 300, 100, 100)
+    // floorGeometry.rotateX(-Math.PI / 2)
+    // const floor = new THREE.Mesh(floorGeometry, this.material)
+    // floor.receiveShadow = true
+    // this.scene.add(floor)
   }
 
   setCannon() {
@@ -105,15 +129,15 @@ export default class Player {
 
     // Tweak contact properties.
     // Contact stiffness - use to make softer/harder contacts
-    this.world.defaultContactMaterial.contactEquationStiffness = 1e9
+    // this.world.defaultContactMaterial.contactEquationStiffness = 1e9
 
     // Stabilization time in number of timesteps
-    this.world.defaultContactMaterial.contactEquationRelaxation = 4
+    // this.world.defaultContactMaterial.contactEquationRelaxation = 4
 
-    const solver = new CANNON.GSSolver()
-    solver.iterations = 7
-    solver.tolerance = 0.1
-    this.world.solver = new CANNON.SplitSolver(solver)
+    // const solver = new CANNON.GSSolver()
+    // solver.iterations = 7
+    // solver.tolerance = 0.1
+    // this.world.solver = new CANNON.SplitSolver(solver)
     // use this to test non-split solver
     // world.solver = solver
 
@@ -133,6 +157,7 @@ export default class Player {
     const radius = 0.5
     this.sphereShape = new CANNON.Sphere(radius)
     this.sphereBody = new CANNON.Body({ mass: 5, material: this.physicsMaterial })
+    // this.sphereBody.fixedRotation = true // Prevent rotation
     this.sphereBody.addShape(this.sphereShape)
     // this.sphereBody.position.set(0, 5, 0)
     this.sphereBody.linearDamping = 0.9
@@ -143,33 +168,7 @@ export default class Player {
     const groundBody = new CANNON.Body({ mass: 0, material: this.physicsMaterial })
     groundBody.addShape(groundShape)
     groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0)
-    this.world.addBody(groundBody)
-
-    // Add boxes both in cannon.js and three.js
-    const halfExtents = new CANNON.Vec3(1, 1, 1)
-    const boxShape = new CANNON.Box(halfExtents)
-    const boxGeometry = new THREE.BoxGeometry(halfExtents.x * 2, halfExtents.y * 2, halfExtents.z * 2)
-
-    for (let i = 0; i < 7; i++) {
-      const boxBody = new CANNON.Body({ mass: 5 })
-      boxBody.addShape(boxShape)
-      const boxMesh = new THREE.Mesh(boxGeometry, this.boxMateiral)
-
-      const x = (Math.random() - 0.5) * 20
-      const y = (Math.random() - 0.5) * 1 + 1
-      const z = (Math.random() - 0.5) * 20
-
-      boxBody.position.set(x, y, z)
-      boxMesh.position.copy(boxBody.position)
-
-      boxMesh.castShadow = true
-      boxMesh.receiveShadow = true
-
-      this.world.addBody(boxBody)
-      this.scene.add(boxMesh)
-      this.boxes.push(boxBody)
-      this.boxMeshes.push(boxMesh)
-    }
+    // this.world.addBody(groundBody)
   }
 
   setPointerLockCannonControls() {
@@ -213,8 +212,10 @@ export default class Player {
 
       sceneModel.traverse((child) => {
         if (child.isMesh) {
-          console.log(child)
           if (child.name.startsWith("Collider_")) {
+            child.material.dispose()
+            child.material = undefined
+            child.visible = false // Hide the collider mesh if you want
             // Convert geometry to Cannon.js Trimesh
             const shape = createTrimesh(child.geometry)
             const position = new THREE.Vector3()
@@ -232,25 +233,32 @@ export default class Player {
             })
 
             this.world.addBody(body)
-            child.visible = false // Hide the collider mesh if you want
           } else {
-            child.material.map.minFilter = THREE.NearestFilter
-            child.material.map.magFilter = THREE.NearestFilter
+            // child.material.map.minFilter = THREE.NearestFilter
+            // child.material.map.magFilter = THREE.NearestFilter
+            child.receiveShadow = true
+            child.castShadow = true
+
+            if (!child.name.startsWith("hiders_")) {
+              child.material.map.magFilter = THREE.NearestFilter
+              child.material.map.minFilter = THREE.NearestFilter
+            }
             // child.material.opacity = 0.5 // Make it 50% opaque
             // child.material.transparent = true // Enable transparency
+            // child.material.transparent = true
+            // child.material.alphaTest = 0.5 // helps with sorting artifacts
+            if (child.material.name.includes("_alpha_")) {
+              child.material.transparent = true
+              child.material.alphaTest = 0.5 // helps with sorting artifacts
+              child.material.depthWrite = true // better visual layering
+            }
           }
-          // if (child.name.startsWith("Birch_Leaves")) {
-          //   child.material.depthWrite = true
-          // }
-          // if (child.name.startsWith("Oak_Leaves")) {
-          //   child.material.depthWrite = true
-          // }
         }
       })
 
       // Now place player on top of island (estimate top Y value or get max)
       // this.controls.target.set(0, 250, 0) // Set a Y value above island
-      this.sphereBody.position.set(-50, 300, 0) // Set a Y value above island
+      this.sphereBody.position.set(-30, 15, -21) // Set a Y value above island
     })
   }
 
@@ -261,12 +269,6 @@ export default class Player {
 
     if (this.controls.enabled) {
       this.world.step(this.timeStep, dt)
-
-      // // Update ball positions
-      // for (let i = 0; i < balls.length; i++) {
-      //   ballMeshes[i].position.copy(balls[i].position)
-      //   ballMeshes[i].quaternion.copy(balls[i].quaternion)
-      // }
 
       // Update box positions
       for (let i = 0; i < this.boxes.length; i++) {

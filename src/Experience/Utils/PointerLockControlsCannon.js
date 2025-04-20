@@ -21,7 +21,7 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
     this.pitchObject.add(camera)
 
     this.yawObject = new THREE.Object3D()
-    this.yawObject.position.y = 2
+    // this.yawObject.position.y = 2
     this.yawObject.add(this.pitchObject)
 
     this.quaternion = new THREE.Quaternion()
@@ -239,6 +239,7 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
     this.velocity.z += this.inputVelocity.z
 
     this.yawObject.position.copy(this.cannonBody.position)
+    this.yawObject.position.y += 1 // eyes are 2 meters above the ground
   }
 }
 
