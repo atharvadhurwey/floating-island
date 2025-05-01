@@ -1,19 +1,80 @@
-*
-{
-    margin: 0;
-    padding: 0;
+* {
+  margin: 0;
+  padding: 0;
 }
 
 html,
-body
-{
-    overflow: hidden;
+body {
+  overflow: hidden;
 }
 
-.webgl
-{
-    position: fixed;
-    top: 0;
-    left: 0;
-    outline: none;
+.webgl {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+}
+
+.wrapper {
+  position: absolute;
+  width: 200px;
+  height: 2px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  margin: auto;
+}
+
+.loader {
+  height: 100%;
+  display: flex;
+  transform: translateZ(0);
+}
+
+.loader div {
+  flex: 1;
+  background: white;
+  animation: go 0.8s infinite alternate ease;
+  box-shadow: 0 0 20px white;
+}
+
+/* Apply different animation delays for each box */
+.loader div:nth-child(1) {
+  animation-delay: -0.08s;
+}
+.loader div:nth-child(2) {
+  animation-delay: -0.16s;
+}
+.loader div:nth-child(3) {
+  animation-delay: -0.24s;
+}
+.loader div:nth-child(4) {
+  animation-delay: -0.32s;
+}
+.loader div:nth-child(5) {
+  animation-delay: -0.4s;
+}
+.loader div:nth-child(6) {
+  animation-delay: -0.48s;
+}
+.loader div:nth-child(7) {
+  animation-delay: -0.56s;
+}
+.loader div:nth-child(8) {
+  animation-delay: -0.64s;
+}
+.loader div:nth-child(9) {
+  animation-delay: -0.72s;
+}
+.loader div:nth-child(10) {
+  animation-delay: -0.8s;
+}
+
+@keyframes go {
+  100% {
+    background: transparent;
+    flex: 10;
+    box-shadow: 0 0 0 transparent;
+  }
 }

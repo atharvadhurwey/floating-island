@@ -49,9 +49,10 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
       }
 
       // If contactNormal.dot(upAxis) is between 0 and 1, we know that the contact normal is somewhat in the up direction.
-      if (contactNormal.dot(upAxis) > 0.4) {
+      if (contactNormal.dot(upAxis) > 0.1) {
         // Use a "good" threshold value between 0 and 1 here!
         this.canJump = true
+        console.log(this.canJump)
       }
     })
 
@@ -239,7 +240,7 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
     this.velocity.z += this.inputVelocity.z
 
     this.yawObject.position.copy(this.cannonBody.position)
-    this.yawObject.position.y += 1 // eyes are 2 meters above the ground
+    this.yawObject.position.y += 1.4 // eyes are 2 meters above the ground
   }
 }
 

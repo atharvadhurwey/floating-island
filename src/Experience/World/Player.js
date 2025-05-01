@@ -42,7 +42,9 @@ export default class Player {
 
     this.textureLoader = new THREE.TextureLoader()
 
-    this.createHouse()
+    this.createIsland()
+
+    // this.respawnPosition = new THREE.Vector3(-30, 20, -21) // set to your desired spawn point
 
     const debugMeshes = []
 
@@ -162,12 +164,11 @@ export default class Player {
     this.world.addContactMaterial(physics_physics)
 
     // Create the user collision sphere
-    const radius = 0.5
+    const radius = 0.45
     this.sphereShape = new CANNON.Sphere(radius)
     this.sphereBody = new CANNON.Body({ mass: 5, material: this.physicsMaterial })
     // this.sphereBody.fixedRotation = true // Prevent rotation
     this.sphereBody.addShape(this.sphereShape)
-    // this.sphereBody.position.set(0, 5, 0)
     this.sphereBody.linearDamping = 0.9
     this.world.addBody(this.sphereBody)
 
@@ -187,12 +188,12 @@ export default class Player {
 
     this.controls.addEventListener("lock", () => {
       this.controls.enabled = true
-      // instructions.style.display = "none"
+      instructions.style.display = "none"
     })
 
     this.controls.addEventListener("unlock", () => {
       this.controls.enabled = false
-      // instructions.style.display = null
+      instructions.style.display = null
     })
   }
 
@@ -201,7 +202,7 @@ export default class Player {
     this.lastCallTime = performance.now()
   }
 
-  createHouse() {
+  createIsland() {
     function createTrimesh(geometry) {
       const position = geometry.attributes.position
       const vertices = []
@@ -217,24 +218,6 @@ export default class Player {
     this.gltfloader.load("/models/Skyisland/glTF/untitled.glb", (gltf) => {
       gltf.scene.traverse((child) => {
         if (child.isMesh) {
-          // if (child.name.includes("lantern")) {
-          //   const lanternLight = new THREE.PointLight(0x8fdaff, 1, 10)
-          //   lanternLight.decay = 1 // Decay rate of the light
-          //   // lanternLight.position.set(-20, 18, -33)
-
-          //   console.log(lanternLight)
-          //   // lanternLight.castShadow = true
-          //   lanternLight.shadow.mapSize.set(8, 8) // smaller shadow map for better perf
-
-          //   lanternLight.position.set(child.position.x, child.position.y, child.position.z)
-          //   lanternLight.updateMatrix()
-          //   lanternLight.matrixAutoUpdate = false // Prevent automatic updates to the matrix
-
-          //   this.scene.add(lanternLight)
-          //   // const lanternLightHelper = new THREE.PointLightHelper(lanternLight, 1)
-          //   // this.scene.add(lanternLightHelper)
-          //   // console.log(child.position)
-          // }
           if (child.name.startsWith("Collider_")) {
             child.material.dispose()
             child.material = undefined
@@ -257,10 +240,10 @@ export default class Player {
 
             this.world.addBody(body)
           } else {
-            console.log(child.name)
             if (this.resources.items[child.name]) {
               const material = new THREE.MeshBasicMaterial({
                 map: this.resources.items[child.name],
+                color: new THREE.Color(0.3, 0.3, 0.3),
               })
               if (child.name.includes("alpha")) {
                 material.transparent = true
@@ -277,85 +260,6 @@ export default class Player {
             // child.castShadow = true
             // child.material.metalness = 0
 
-            // if (child.name == "Stone_Baked") {
-            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Stone_Baked.png")
-            //   texture.colorSpace = THREE.SRGBColorSpace
-            //   child.material.map = texture
-            //   child.material.map.flipY = false // Fixes texture flipping issue
-            // }
-
-            // if (child.name == "Grass_Block_Baked") {
-            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Grass_Block_Baked.png")
-            //   texture.colorSpace = THREE.SRGBColorSpace
-            //   child.material.map = texture
-            //   child.material.map.flipY = false // Fixes texture flipping issue
-            // }
-
-            // if (child.name == "Warped_Path_Baked") {
-            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Warped_Path_Baked.png")
-            //   texture.colorSpace = THREE.SRGBColorSpace
-            //   child.material.map = texture
-            //   child.material.map.flipY = false // Fixes texture flipping issue
-            // }
-
-            // if (child.name == "Cave_Baked") {
-            //   // const texture = this.textureLoader.load("/models/Skyisland/textures/Cave_Baked.png")
-            //   // texture.colorSpace = THREE.SRGBColorSpace
-            //   // child.material.map = texture
-            //   // child.material.map.colorSpace = THREE.LinearSRGBColorSpace
-            //   // child.material.map.flipY = false // Fixes texture flipping issue
-            // }
-
-            // if (child.name == "Dirt_Baked") {
-            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Dirt_Baked.png")
-            //   texture.colorSpace = THREE.SRGBColorSpace
-            //   child.material.map = texture
-            //   child.material.map.flipY = false // Fixes texture flipping issue
-            // }
-
-            // if (child.name == "Extra_Baked") {
-            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Extra_Baked.png")
-            //   texture.colorSpace = THREE.SRGBColorSpace
-            //   child.material.map = texture
-            //   child.material.map.flipY = false // Fixes texture flipping issue
-            // }
-
-            // if (child.name == "Logs_Baked") {
-            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Logs_Baked.png")
-            //   // texture.colorSpace = THREE.SRGBColorSpace
-            //   child.material.map = texture
-            //   child.material.map.flipY = false // Fixes texture flipping issue
-            // }
-
-            // if (child.name == "PinkTowers_Baked") {
-            //   const texture = this.textureLoader.load("/models/Skyisland/textures/PinkTowers_Baked.png")
-            //   texture.colorSpace = THREE.SRGBColorSpace
-            //   child.material.map = texture
-            //   child.material.map.flipY = false // Fixes texture flipping issue
-            // }
-
-            // if (child.name == "Stone_Close_Baked") {
-            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Stone_Close_Baked.png")
-            //   texture.colorSpace = THREE.SRGBColorSpace
-            //   child.material.map = texture
-            //   child.material.map.flipY = false // Fixes texture flipping issue
-            // }
-
-            // child.material.opacity = 0.5 // Make it 50% opaque
-            // child.material.transparent = true // Enable transparency
-            // child.material.transparent = true
-            // child.material.alphaTest = 0.5 // helps with sorting artifacts
-
-            // if (child.name.includes("_alpha")) {
-            //   // const texture = this.textureLoader.load("/models/Skyisland/textures/textureAtlasTransparant.png")
-            //   // texture.colorSpace = THREE.SRGBColorSpace
-            //   // child.material.map = texture
-            //   // child.material.map.flipY = false // Fixes texture flipping issue
-            //   child.material.transparent = true
-            //   child.material.alphaTest = 0.5 // helps with sorting artifacts
-            //   child.material.depthWrite = true // better visual layering
-            // }
-
             // if (!(child.name.startsWith("hiders_") || child.name.startsWith("Quartz"))) {
             //   child.material.map.magFilter = THREE.NearestFilter
             //   child.material.map.minFilter = THREE.NearestFilter
@@ -369,23 +273,21 @@ export default class Player {
 
       this.scene.add(gltf.scene)
 
-      // setTimeout(() => {
-      //   this.scene.traverse((object) => {
-      //     if (object.isLight) {
-      //       object.castShadow = false
-      //       console.log("i was here")
-      //     }
-      //     if (object.isMesh) {
-      //       object.castShadow = false
-      //       object.receiveShadow = false
-      //     }
-      //   })
-      // }, 5000) // Small timeout to ensure loading finishes
-
       // Now place player on top of island (estimate top Y value or get max)
       // this.controls.target.set(0, 250, 0) // Set a Y value above island
       this.sphereBody.position.set(-30, 20, -21) // Set a Y value above island
+      this.finishLoading()
     })
+  }
+
+  finishLoading() {
+    const loadingScreen = document.getElementById("loading-screen")
+    loadingScreen.style.opacity = "0"
+    loadingScreen.style.display = "none"
+
+    const instructions = document.getElementById("instructions")
+    instructions.style.opacity = "1"
+    instructions.style.display = "flex"
   }
 
   update() {
@@ -400,6 +302,10 @@ export default class Player {
       for (let i = 0; i < this.boxes.length; i++) {
         this.boxMeshes[i].position.copy(this.boxes[i].position)
         this.boxMeshes[i].quaternion.copy(this.boxes[i].quaternion)
+      }
+      if (this.sphereBody.position.y < -150) {
+        // Reset position and velocity
+        this.sphereBody.position.set(-30, 20, -21)
       }
     }
 

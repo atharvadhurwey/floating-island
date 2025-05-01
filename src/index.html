@@ -5,9 +5,57 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Floating Island</title>
     <link rel="stylesheet" href="./style.css" />
+    <style>
+      #instructions {
+        position: fixed;
+        left: 0;
+        top: 0;
+
+        width: 100%;
+        height: 100%;
+
+        opacity: 0;
+
+        display: none;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #ffffff;
+        text-align: center;
+
+        cursor: pointer;
+      }
+
+      #instructions span {
+        font-size: 40px;
+      }
+    </style>
   </head>
   <body>
     <canvas class="webgl"></canvas>
+    <div id="loading-screen">
+      <div class="wrapper">
+        <div class="loader">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+    <div id="instructions">
+      <span>CLICK TO START</span>
+      <br />
+      (W,A,S,D = Move, SPACE = Jump, MOUSE = Look)
+    </div>
     <script type="module" src="./script.js"></script>
   </body>
 </html>
