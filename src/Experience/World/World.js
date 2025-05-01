@@ -1,5 +1,4 @@
 import Experience from "../Experience.js"
-import Environment from "./Environment.js"
 import Floor from "./Floor.js"
 import Fox from "./Fox.js"
 import Player from "./Player.js"
@@ -15,7 +14,6 @@ export default class World {
       // Setup
       // this.floor = new Floor()
       this.player = new Player()
-      //   this.environment = new Environment()
     })
   }
 

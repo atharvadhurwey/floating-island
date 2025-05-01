@@ -36,10 +36,11 @@ export default class Player {
 
     this.dracoLoader = new DRACOLoader()
     this.dracoLoader.setDecoderPath("/draco/")
-    console.log(this.dracoLoader)
 
     this.gltfloader = new GLTFLoader()
     this.gltfloader.setDRACOLoader(this.dracoLoader)
+
+    this.textureLoader = new THREE.TextureLoader()
 
     this.createHouse()
 
@@ -68,34 +69,41 @@ export default class Player {
 
   setLights() {
     // const ambientLight = new THREE.AmbientLight(0x222244, 1)
-    const ambientLight = new THREE.AmbientLight(0x222244, 0.2)
+    const ambientLight = new THREE.AmbientLight(0x404040, 4)
     this.scene.add(ambientLight)
 
-    const spotlight = new THREE.SpotLight(0xffffff, 0.9, 0, Math.PI / 4, 10)
-    spotlight.position.set(-20, 50, -20)
-    spotlight.target.position.set(0, 0, 0)
+    // const spotlight = new THREE.SpotLight(0xffffff, 0.9, 0, Math.PI / 4, 10)
+    // spotlight.position.set(-20, 50, -20)
+    // spotlight.target.position.set(0, 0, 0)
 
-    spotlight.castShadow = true
+    // spotlight.castShadow = true
 
-    spotlight.shadow.camera.near = 10
-    spotlight.shadow.camera.far = 100
-    spotlight.shadow.camera.fov = 30
+    // spotlight.shadow.camera.near = 10
+    // spotlight.shadow.camera.far = 100
+    // spotlight.shadow.camera.fov = 30
 
-    // spotlight.shadow.bias = -0.0001
-    spotlight.shadow.mapSize.width = 2048
-    spotlight.shadow.mapSize.height = 2048
+    // // spotlight.shadow.bias = -0.0001
+    // spotlight.shadow.mapSize.width = 2048
+    // spotlight.shadow.mapSize.height = 2048
 
     // this.scene.add(spotlight)
 
-    this.scene.fog = new THREE.Fog("#2e4482", 10, 100)
-    this.scene.background = new THREE.Color("#2e4482") // Light blue sky
+    this.scene.fog = new THREE.Fog("#404040", 10, 100)
+    this.scene.background = new THREE.Color("#404040") // Light blue sky
 
-    const moonLight = new THREE.DirectionalLight(0xaaaaff, 0.3)
-    moonLight.position.set(-20, 50, -20)
-    this.scene.add(moonLight)
+    // const moonLight = new THREE.DirectionalLight(0xaaaaff, 0.3)
+    // moonLight.position.set(-20, 50, -20)
+    // this.scene.add(moonLight)
 
-    const moonLightHelper = new THREE.DirectionalLightHelper(moonLight, 5)
-    this.scene.add(moonLightHelper)
+    // const moonLightHelper = new THREE.DirectionalLightHelper(moonLight, 5)
+    // this.scene.add(moonLightHelper)
+
+    // const lanternLight = new THREE.PointLight(0x8fdaff, 10, 200)
+    // lanternLight.position.set(-20, 18, -33)
+    // this.scene.add(lanternLight)
+
+    // const lanternLightHelper = new THREE.PointLightHelper(lanternLight, 1)
+    // this.scene.add(lanternLightHelper)
 
     // const cubeTextureLoader = new THREE.CubeTextureLoader()
     // const environmentMap = cubeTextureLoader.load([
@@ -207,11 +215,26 @@ export default class Player {
     }
 
     this.gltfloader.load("/models/Skyisland/glTF/untitled.glb", (gltf) => {
-      const sceneModel = gltf.scene
-      this.scene.add(sceneModel)
-
-      sceneModel.traverse((child) => {
+      gltf.scene.traverse((child) => {
         if (child.isMesh) {
+          // if (child.name.includes("lantern")) {
+          //   const lanternLight = new THREE.PointLight(0x8fdaff, 1, 10)
+          //   lanternLight.decay = 1 // Decay rate of the light
+          //   // lanternLight.position.set(-20, 18, -33)
+
+          //   console.log(lanternLight)
+          //   // lanternLight.castShadow = true
+          //   lanternLight.shadow.mapSize.set(8, 8) // smaller shadow map for better perf
+
+          //   lanternLight.position.set(child.position.x, child.position.y, child.position.z)
+          //   lanternLight.updateMatrix()
+          //   lanternLight.matrixAutoUpdate = false // Prevent automatic updates to the matrix
+
+          //   this.scene.add(lanternLight)
+          //   // const lanternLightHelper = new THREE.PointLightHelper(lanternLight, 1)
+          //   // this.scene.add(lanternLightHelper)
+          //   // console.log(child.position)
+          // }
           if (child.name.startsWith("Collider_")) {
             child.material.dispose()
             child.material = undefined
@@ -234,31 +257,134 @@ export default class Player {
 
             this.world.addBody(body)
           } else {
+            console.log(child.name)
+            if (this.resources.items[child.name]) {
+              const material = new THREE.MeshBasicMaterial({
+                map: this.resources.items[child.name],
+              })
+              if (child.name.includes("alpha")) {
+                material.transparent = true
+                material.alphaTest = 0.5 // helps with sorting artifacts
+                material.depthWrite = true // better visual layering
+                material.side = THREE.DoubleSide // Render both sides of the mesh
+              }
+              child.material = material
+            }
+
             // child.material.map.minFilter = THREE.NearestFilter
             // child.material.map.magFilter = THREE.NearestFilter
-            child.receiveShadow = true
-            child.castShadow = true
+            // child.receiveShadow = true
+            // child.castShadow = true
+            // child.material.metalness = 0
 
-            if (!child.name.startsWith("hiders_")) {
-              child.material.map.magFilter = THREE.NearestFilter
-              child.material.map.minFilter = THREE.NearestFilter
-            }
+            // if (child.name == "Stone_Baked") {
+            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Stone_Baked.png")
+            //   texture.colorSpace = THREE.SRGBColorSpace
+            //   child.material.map = texture
+            //   child.material.map.flipY = false // Fixes texture flipping issue
+            // }
+
+            // if (child.name == "Grass_Block_Baked") {
+            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Grass_Block_Baked.png")
+            //   texture.colorSpace = THREE.SRGBColorSpace
+            //   child.material.map = texture
+            //   child.material.map.flipY = false // Fixes texture flipping issue
+            // }
+
+            // if (child.name == "Warped_Path_Baked") {
+            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Warped_Path_Baked.png")
+            //   texture.colorSpace = THREE.SRGBColorSpace
+            //   child.material.map = texture
+            //   child.material.map.flipY = false // Fixes texture flipping issue
+            // }
+
+            // if (child.name == "Cave_Baked") {
+            //   // const texture = this.textureLoader.load("/models/Skyisland/textures/Cave_Baked.png")
+            //   // texture.colorSpace = THREE.SRGBColorSpace
+            //   // child.material.map = texture
+            //   // child.material.map.colorSpace = THREE.LinearSRGBColorSpace
+            //   // child.material.map.flipY = false // Fixes texture flipping issue
+            // }
+
+            // if (child.name == "Dirt_Baked") {
+            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Dirt_Baked.png")
+            //   texture.colorSpace = THREE.SRGBColorSpace
+            //   child.material.map = texture
+            //   child.material.map.flipY = false // Fixes texture flipping issue
+            // }
+
+            // if (child.name == "Extra_Baked") {
+            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Extra_Baked.png")
+            //   texture.colorSpace = THREE.SRGBColorSpace
+            //   child.material.map = texture
+            //   child.material.map.flipY = false // Fixes texture flipping issue
+            // }
+
+            // if (child.name == "Logs_Baked") {
+            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Logs_Baked.png")
+            //   // texture.colorSpace = THREE.SRGBColorSpace
+            //   child.material.map = texture
+            //   child.material.map.flipY = false // Fixes texture flipping issue
+            // }
+
+            // if (child.name == "PinkTowers_Baked") {
+            //   const texture = this.textureLoader.load("/models/Skyisland/textures/PinkTowers_Baked.png")
+            //   texture.colorSpace = THREE.SRGBColorSpace
+            //   child.material.map = texture
+            //   child.material.map.flipY = false // Fixes texture flipping issue
+            // }
+
+            // if (child.name == "Stone_Close_Baked") {
+            //   const texture = this.textureLoader.load("/models/Skyisland/textures/Stone_Close_Baked.png")
+            //   texture.colorSpace = THREE.SRGBColorSpace
+            //   child.material.map = texture
+            //   child.material.map.flipY = false // Fixes texture flipping issue
+            // }
+
             // child.material.opacity = 0.5 // Make it 50% opaque
             // child.material.transparent = true // Enable transparency
             // child.material.transparent = true
             // child.material.alphaTest = 0.5 // helps with sorting artifacts
-            if (child.material.name.includes("_alpha_")) {
-              child.material.transparent = true
-              child.material.alphaTest = 0.5 // helps with sorting artifacts
-              child.material.depthWrite = true // better visual layering
-            }
+
+            // if (child.name.includes("_alpha")) {
+            //   // const texture = this.textureLoader.load("/models/Skyisland/textures/textureAtlasTransparant.png")
+            //   // texture.colorSpace = THREE.SRGBColorSpace
+            //   // child.material.map = texture
+            //   // child.material.map.flipY = false // Fixes texture flipping issue
+            //   child.material.transparent = true
+            //   child.material.alphaTest = 0.5 // helps with sorting artifacts
+            //   child.material.depthWrite = true // better visual layering
+            // }
+
+            // if (!(child.name.startsWith("hiders_") || child.name.startsWith("Quartz"))) {
+            //   child.material.map.magFilter = THREE.NearestFilter
+            //   child.material.map.minFilter = THREE.NearestFilter
+            // }
+            // if (child.name.startsWith("hiders_")) {
+            //   child.visible = false // Hide the collider mesh if you want
+            // }
           }
         }
       })
 
+      this.scene.add(gltf.scene)
+
+      // setTimeout(() => {
+      //   this.scene.traverse((object) => {
+      //     if (object.isLight) {
+      //       object.castShadow = false
+      //       console.log("i was here")
+      //     }
+      //     if (object.isMesh) {
+      //       object.castShadow = false
+      //       object.receiveShadow = false
+      //     }
+      //   })
+      // }, 5000) // Small timeout to ensure loading finishes
+
       // Now place player on top of island (estimate top Y value or get max)
       // this.controls.target.set(0, 250, 0) // Set a Y value above island
-      this.sphereBody.position.set(-30, 15, -21) // Set a Y value above island
+      this.sphereBody.position.set(-30, 20, -21) // Set a Y value above island
     })
   }
 
