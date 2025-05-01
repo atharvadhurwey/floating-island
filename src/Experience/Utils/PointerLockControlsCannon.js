@@ -150,7 +150,7 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
         if (this.canJump) {
           this.velocity.y = this.jumpVelocity
         }
-        this.canJump = false
+        this.canJump = true
         break
     }
   }

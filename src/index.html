@@ -3,35 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet" />
+
     <title>Floating Island</title>
     <link rel="stylesheet" href="./style.css" />
-    <style>
-      #instructions {
-        position: fixed;
-        left: 0;
-        top: 0;
-
-        width: 100%;
-        height: 100%;
-
-        opacity: 0;
-
-        display: none;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-
-        background-color: rgba(0, 0, 0, 0.5);
-        color: #ffffff;
-        text-align: center;
-
-        cursor: pointer;
-      }
-
-      #instructions span {
-        font-size: 40px;
-      }
-    </style>
   </head>
   <body>
     <canvas class="webgl"></canvas>
@@ -54,7 +32,10 @@
     <div id="instructions">
       <span>CLICK TO START</span>
       <br />
-      (W,A,S,D = Move, SPACE = Jump, MOUSE = Look)
+      (W,A,S,D = Move, SPACE = Jump, MOUSE = Look, R = Reset)
+      <br />
+      <br />
+      tip: can't climb stairs, try jumping
     </div>
     <script type="module" src="./script.js"></script>
   </body>

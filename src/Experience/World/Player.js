@@ -96,23 +96,19 @@ export default class Player {
     this.sphereBody.addShape(this.sphereShape)
     this.sphereBody.linearDamping = 0.9
     this.world.addBody(this.sphereBody)
+
+    window.addEventListener("keydown", (event) => {
+      if (event.code === "KeyR") {
+        this.sphereBody.position.set(-30, 20, -21) // Reset position
+        this.sphereBody.velocity.set(0, 0, 0) // Reset velocity
+        this.sphereBody.angularVelocity.set(0, 0, 0) // Reset angular velocity
+      }
+    })
   }
 
   setPointerLockCannonControls() {
     this.controls = new PointerLockControlsCannon(this.camera, this.sphereBody)
     this.scene.add(this.controls.getObject())
-
-    document.addEventListener("click", () => this.controls.lock())
-
-    this.controls.addEventListener("lock", () => {
-      this.controls.enabled = true
-      instructions.style.display = "none"
-    })
-
-    this.controls.addEventListener("unlock", () => {
-      this.controls.enabled = false
-      instructions.style.display = null
-    })
   }
 
   setTime() {
@@ -200,6 +196,18 @@ export default class Player {
     const instructions = document.getElementById("instructions")
     instructions.style.opacity = "1"
     instructions.style.display = "flex"
+
+    document.addEventListener("click", () => this.controls.lock())
+
+    this.controls.addEventListener("lock", () => {
+      this.controls.enabled = true
+      instructions.style.display = "none"
+    })
+
+    this.controls.addEventListener("unlock", () => {
+      this.controls.enabled = false
+      instructions.style.display = null
+    })
   }
 
   update() {
