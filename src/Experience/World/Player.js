@@ -14,6 +14,7 @@ export default class Player {
     this.camera = this.experience.camera.instance
     this.physicsWorld = this.experience.physicsWorld
     this.controls = this.experience.camera.controls
+    this.debug = this.experience.debug
 
     this.setLights()
 
@@ -33,6 +34,13 @@ export default class Player {
 
     // this.respawnPosition = new THREE.Vector3(-30, 20, -21) // set to your desired spawn point
 
+    if (this.debug.active) {
+      this.debug.ui.addFolder("press 'E' to toggle view collisions").close()
+      this.setCannonDebug()
+    }
+  }
+
+  setCannonDebug() {
     const debugMeshes = []
 
     // Initialize CannonDebugger
@@ -210,6 +218,8 @@ export default class Player {
 
     this.controls.update(dt)
 
-    this.cannonDebugger.update()
+    if (this.debug.active) {
+      this.cannonDebugger.update()
+    }
   }
 }

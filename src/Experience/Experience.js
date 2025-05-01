@@ -33,15 +33,17 @@ export default class Experience {
     this.sizes = new Sizes()
     this.time = new Time()
     this.scene = new THREE.Scene()
-    this.scene.fog = new THREE.Fog(0x000000, 0, 500)
     this.camera = new Camera()
     this.renderer = new Renderer()
     this.resources = new Resources(sources)
     this.world = new World()
     this.physicsWorld = new CANNON.World()
     this.physicsWorld.gravity.set(0, -9.82, 0) // m/s²
-    this.stats = new Stats()
-    document.body.appendChild(this.stats.dom)
+
+    if (this.debug.active) {
+      this.stats = new Stats()
+      document.body.appendChild(this.stats.dom)
+    }
 
     // Resize event
     this.sizes.on("resize", () => {
@@ -63,7 +65,10 @@ export default class Experience {
     this.camera.update()
     this.world.update()
     this.renderer.update()
-    this.stats.update()
+
+    if (this.debug.active) {
+      this.stats.update()
+    }
   }
 
   destroy() {

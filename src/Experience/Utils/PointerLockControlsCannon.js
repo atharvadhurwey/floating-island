@@ -52,7 +52,6 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
       if (contactNormal.dot(upAxis) > 0.1) {
         // Use a "good" threshold value between 0 and 1 here!
         this.canJump = true
-        console.log(this.canJump)
       }
     })
 

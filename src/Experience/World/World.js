@@ -1,6 +1,4 @@
 import Experience from "../Experience.js"
-import Floor from "./Floor.js"
-import Fox from "./Fox.js"
 import Player from "./Player.js"
 
 export default class World {
@@ -12,13 +10,11 @@ export default class World {
     // Wait for resources
     this.resources.on("ready", () => {
       // Setup
-      // this.floor = new Floor()
       this.player = new Player()
     })
   }
 
   update() {
-    if (this.floor) this.floor.updatePhysics()
     if (this.player) this.player.update()
   }
 }

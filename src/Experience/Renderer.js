@@ -24,7 +24,7 @@ export default class Renderer {
     this.instance.setClearColor("#211d20")
     this.instance.setSize(this.sizes.width, this.sizes.height)
     this.instance.setPixelRatio(this.sizes.pixelRatio)
-    // this.instance.outputEncoding = THREE.sRGBEncoding
+    this.instance.outputEncoding = THREE.sRGBEncoding
   }
 
   resize() {
