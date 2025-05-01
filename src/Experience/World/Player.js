@@ -89,7 +89,7 @@ export default class Player {
     this.world.addContactMaterial(physics_physics)
 
     // Create the user collision sphere
-    const radius = 0.45
+    const radius = 0.55
     this.sphereShape = new CANNON.Sphere(radius)
     this.sphereBody = new CANNON.Body({ mass: 5, material: this.physicsMaterial })
     // this.sphereBody.fixedRotation = true // Prevent rotation
