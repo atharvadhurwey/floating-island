@@ -163,6 +163,8 @@ export default class Player {
                 material.transparent = true
                 material.alphaTest = 0.5 // helps with sorting artifacts
                 material.depthWrite = true // better visual layering
+                material.depthTest = true // better visual layering
+                material.side = THREE.DoubleSide // better visual layering
               }
               child.material = material
             }
@@ -173,6 +175,7 @@ export default class Player {
                 transparent: true,
                 opacity: 0.2, // Try 0.2–0.6 for tuning
                 depthWrite: false, // Important: allows objects behind to render
+                side: THREE.DoubleSide, // Important: allows objects behind to render
               })
             }
 
