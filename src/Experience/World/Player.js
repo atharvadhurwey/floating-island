@@ -163,9 +163,17 @@ export default class Player {
                 material.transparent = true
                 material.alphaTest = 0.5 // helps with sorting artifacts
                 material.depthWrite = true // better visual layering
-                material.side = THREE.DoubleSide // Render both sides of the mesh
               }
               child.material = material
+            }
+
+            if (child.name == "water") {
+              child.material = new THREE.MeshBasicMaterial({
+                color: 0x3366ff,
+                transparent: true,
+                opacity: 0.2, // Try 0.2–0.6 for tuning
+                depthWrite: false, // Important: allows objects behind to render
+              })
             }
 
             // if (!(child.name.startsWith("hiders_") || child.name.startsWith("Quartz"))) {
