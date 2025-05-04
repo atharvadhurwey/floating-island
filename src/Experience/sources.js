@@ -1,8 +1,13 @@
 export default [
   {
-    name: "Stone_Baked",
+    name: "Stone_Upper_Baked",
     type: "texture",
-    path: "models/Skyisland/textures/Stone_Light_Baked.webp",
+    path: "models/Skyisland/textures/Stone_Upper_Light_Baked.webp",
+  },
+  {
+    name: "Stone_Lower_Baked",
+    type: "texture",
+    path: "models/Skyisland/textures/Stone_Lower_Light_Baked.webp",
   },
   {
     name: "Dirt_Baked",
@@ -13,11 +18,6 @@ export default [
     name: "Quartz_Baked",
     type: "texture",
     path: "models/Skyisland/textures/Quartz_Light_Baked.webp",
-  },
-  {
-    name: "PinkTowers_Baked",
-    type: "texture",
-    path: "models/Skyisland/textures/PinkTowers_Light_Baked.webp",
   },
   {
     name: "PinkTowers_Baked",

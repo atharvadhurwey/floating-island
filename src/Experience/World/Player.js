@@ -179,9 +179,11 @@ export default class Player {
               })
             }
 
-            // if (!(child.name.startsWith("hiders_") || child.name.startsWith("Quartz"))) {
-            //   child.material.map.magFilter = THREE.NearestFilter
-            //   child.material.map.minFilter = THREE.NearestFilter
+            // if (child.name == "hiders") {
+            //   child.material = new THREE.MeshBasicMaterial({
+            //     color: 0x000000,
+            //     side: THREE.DoubleSide, // Important: allows objects behind to render
+            //   })
             // }
             // if (child.name.startsWith("hiders_")) {
             //   child.visible = false // Hide the collider mesh if you want
@@ -192,9 +194,9 @@ export default class Player {
 
       this.scene.add(gltf.scene)
 
-      // Now place player on top of island (estimate top Y value or get max)
-      // this.controls.target.set(0, 250, 0) // Set a Y value above island
-      this.sphereBody.position.set(-30, 20, -21) // Set a Y value above island
+      this.sphereBody.position.set(-30, 20, -21) // (SPAWN POINT)
+      // this.sphereBody.position.set(-57, 3, 85) // (HAXAGON SPAWN POINT)
+
       this.finishLoading()
     })
   }
