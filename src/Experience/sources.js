@@ -84,4 +84,9 @@ export default [
     path: "models/Skyisland/textures/textureAtlasTransparant.webp",
     alpha: true,
   },
+  {
+    name: "moon",
+    type: "texture",
+    path: "images/moon.webp",
+  },
 ]

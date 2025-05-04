@@ -32,6 +32,7 @@ export default class Player {
 
     this.setSounds()
     this.createIsland()
+    this.createMoon()
 
     // this.respawnPosition = new THREE.Vector3(-30, 20, -21) // set to your desired spawn point
 
@@ -230,6 +231,40 @@ export default class Player {
 
       this.finishLoading()
     })
+  }
+
+  createMoon() {
+    // Scale Controls
+    const moonScale = { size: 75 }
+
+    const moonTexture = this.resources.items["moon"]
+
+    const moonMaterial = new THREE.SpriteMaterial({
+      map: moonTexture,
+      transparent: true,
+      fog: false,
+    })
+
+    const moonSprite = new THREE.Sprite(moonMaterial)
+    moonSprite.scale.set(moonScale.size, moonScale.size, 1)
+    moonSprite.position.set(-10, 500, -60)
+    this.scene.add(moonSprite)
+
+    if (this.debug.active) {
+      const moonFolder = this.debug.ui.addFolder("Moon 🌙")
+      moonFolder.add(moonSprite.position, "x", -1000, 1000, 10).name("Position X")
+      moonFolder.add(moonSprite.position, "y", -1000, 1000, 10).name("Position Y")
+      moonFolder.add(moonSprite.position, "z", -1000, 1000, 10).name("Position Z")
+
+      moonFolder
+        .add(moonScale, "size", 50, 150)
+        .name("Moon Size")
+        .onChange((value) => {
+          moonSprite.scale.set(value, value, 1)
+        })
+
+      moonFolder.open()
+    }
   }
 
   finishLoading() {
