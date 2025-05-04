@@ -8,6 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet" />
 
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png" />
+    <link rel="manifest" href="./favicon/site.webmanifest" />
+
     <title>Midnight Blocks</title>
     <link rel="stylesheet" href="./style.css" />
   </head>
@@ -32,11 +37,14 @@
     <div id="instructions">
       <span>CLICK TO START</span>
       <br />
-      (W,A,S,D = Move, SPACE = Jump, MOUSE = Look, R = Reset)
+      (W,A,S,D = Move, SPACE = Jump, MOUSE = Look, R = Reset) <br />
+      (ESC = Pause)
       <br />
       <br />
       tip: can't climb stairs, try jumping
+      <br />
     </div>
+    <button id="musicToggle" tabindex="-1">🔇</button>
     <script type="module" src="./script.js"></script>
   </body>
 </html>

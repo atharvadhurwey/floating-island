@@ -40,6 +40,33 @@ body {
   font-size: 60px;
 }
 
+#musicToggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 12px;
+  font-size: 24px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  color: white;
+  cursor: pointer;
+  z-index: 1000;
+
+  opacity: 0;
+  display: none;
+
+  outline: none;
+}
+
+#musicToggle:focus {
+  outline: none;
+}
+
+#musicToggle:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
 .webgl {
   position: fixed;
   top: 0;

@@ -13,7 +13,7 @@ export default class Player {
     this.resources = this.experience.resources
     this.camera = this.experience.camera.instance
     this.physicsWorld = this.experience.physicsWorld
-    this.controls = this.experience.camera.controls
+    // this.controls = this.experience.camera.controls
     this.debug = this.experience.debug
 
     this.setLights()
@@ -30,6 +30,7 @@ export default class Player {
 
     this.textureLoader = new THREE.TextureLoader()
 
+    this.setSounds()
     this.createIsland()
 
     // this.respawnPosition = new THREE.Vector3(-30, 20, -21) // set to your desired spawn point
@@ -114,6 +115,36 @@ export default class Player {
   setTime() {
     this.timeStep = 1 / 60
     this.lastCallTime = performance.now()
+  }
+
+  setSounds() {
+    // adding audio
+    const listener = new THREE.AudioListener()
+    this.camera.add(listener)
+
+    const sound = new THREE.Audio(listener)
+
+    const audioLoader = new THREE.AudioLoader()
+    audioLoader.load("/audio/fellowship.mp3", function (buffer) {
+      sound.setBuffer(buffer)
+      sound.setLoop(true)
+      sound.setVolume(0.1)
+
+      const btn = document.getElementById("musicToggle")
+
+      let isPlaying = false
+
+      btn.addEventListener("click", () => {
+        if (isPlaying) {
+          sound.pause()
+          btn.textContent = "🔇"
+        } else {
+          sound.play()
+          btn.textContent = "🔊"
+        }
+        isPlaying = !isPlaying
+      })
+    })
   }
 
   createIsland() {
@@ -210,16 +241,22 @@ export default class Player {
     instructions.style.opacity = "1"
     instructions.style.display = "flex"
 
-    document.addEventListener("click", () => this.controls.lock())
+    const musicToggle = document.getElementById("musicToggle")
+    musicToggle.style.opacity = "1"
+    musicToggle.style.display = "inline-block"
+
+    instructions.addEventListener("click", () => this.controls.lock())
 
     this.controls.addEventListener("lock", () => {
       this.controls.enabled = true
       instructions.style.display = "none"
+      musicToggle.style.display = "none"
     })
 
     this.controls.addEventListener("unlock", () => {
       this.controls.enabled = false
-      instructions.style.display = null
+      instructions.style.display = "flex"
+      musicToggle.style.display = "inline-block"
     })
   }
 
