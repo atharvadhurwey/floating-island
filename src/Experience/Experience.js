@@ -11,6 +11,7 @@ import Resources from "./Utils/Resources.js"
 import Stats from "three/examples/jsm/libs/stats.module.js"
 
 import sources from "./sources.js"
+import Books from "./World/Books.js"
 
 let instance = null
 
@@ -37,6 +38,7 @@ export default class Experience {
     this.renderer = new Renderer()
     this.resources = new Resources(sources)
     this.world = new World()
+    this.books = new Books()
     this.physicsWorld = new CANNON.World()
     this.physicsWorld.gravity.set(0, -9.82, 0) // m/s²
 

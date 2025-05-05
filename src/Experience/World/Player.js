@@ -28,13 +28,10 @@ export default class Player {
     this.gltfloader = new GLTFLoader()
     this.gltfloader.setDRACOLoader(this.dracoLoader)
 
-    this.textureLoader = new THREE.TextureLoader()
-
     this.setSounds()
     this.createIsland()
     this.createMoon()
-
-    // this.respawnPosition = new THREE.Vector3(-30, 20, -21) // set to your desired spawn point
+    this.placeBooks()
 
     if (this.debug.active) {
       this.debug.ui.addFolder("press 'E' to toggle view collisions").close()
@@ -267,6 +264,57 @@ export default class Player {
     }
   }
 
+  placeBooks() {
+    this.books = this.experience.books
+
+    const book = [
+      // {
+      //   title: "tempBook",
+      //   position: { x: -21.0, y: 16.0, z: -29.0 },
+      //   text: "lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+      // },
+      {
+        title: "Lake of Echoes",
+        position: { x: -4.5, y: 14.0, z: -12.0 },
+        text: "No Fish stir these waters. Only stillness, and echoes of what once was. The glow beneath mourns quietly.",
+      },
+      {
+        title: "Beneath the Blossom",
+        position: { x: 69.5, y: 14.0, z: 43.0 },
+        text: "The tree blooms, unyielding to time. Two sentinels drift above unmanned, unwavering. Some say they await a signal that may never come.",
+      },
+      {
+        title: "Ivory Descent",
+        position: { x: -89.0, y: 15.5, z: -59.0 },
+        text: "Light spills across the circular path. Whispers cling to its base—of voices long sealed. The tower listens but never answers.",
+      },
+      {
+        title: "The Forsaken Spire",
+        position: { x: -57.0, y: 4.5, z: 73.0 },
+        text: "They carved knowledge from silence. The portal remains mute, dormant, and hungering. Something passed through once it may again.",
+      },
+      {
+        title: "Crown of the Island",
+        position: { x: -59.0, y: 110.0, z: 43.5 },
+        text: "No path leads here. Only will, and broken breath. Beyond the heights — only fog. Some say it hides what was never meant to be found.",
+      },
+      {
+        title: "The Offering",
+        position: { x: -29.0, y: -210.0, z: 13.0 },
+        text: "A toll is demanded. Not in coin, but in form. The body may return but not unchanged. Each return is a memory etched deeper than before.",
+      },
+      {
+        title: "The Last Witness",
+        position: { x: -41.5, y: 24.5, z: 10.5 },
+        text: "He wrote what he saw. Now silence keeps his place. The island remembers.",
+      },
+    ]
+
+    book.forEach((book) => {
+      this.books.createBook(book.title, book.position, book.text)
+    })
+  }
+
   finishLoading() {
     const loadingScreen = document.getElementById("loading-screen")
     loadingScreen.style.opacity = "0"
@@ -303,11 +351,15 @@ export default class Player {
     if (this.controls.enabled) {
       this.world.step(this.timeStep, dt)
 
-      if (this.sphereBody.position.y < -150) {
+      if (this.sphereBody.position.y < -220) {
         // Reset position and velocity
         this.sphereBody.position.set(-30, 20, -21)
       }
     }
+
+    this.books.update(this.sphereBody.position)
+
+    // console.log(this.sphereBody.position)
 
     this.controls.update(dt)
 

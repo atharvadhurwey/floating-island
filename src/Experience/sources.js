@@ -89,4 +89,9 @@ export default [
     type: "texture",
     path: "images/moon.webp",
   },
+  {
+    name: "book",
+    type: "texture",
+    path: "images/book.webp",
+  },
 ]
