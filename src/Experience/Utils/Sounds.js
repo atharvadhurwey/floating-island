@@ -16,6 +16,8 @@ export default class Sounds extends EventEmitter {
     this.sfxToggle = true // Sound effects toggle
     this.musicToggle = false // Music toggle
 
+    // FX Sound Button
+    this.currentSfxVolume = 0.5 // Default volume for sound effects
     const fxBtn = document.getElementById("fxToggle")
     fxBtn.textContent = this.sfxToggle ? "💫" : "❌"
 
@@ -26,6 +28,18 @@ export default class Sounds extends EventEmitter {
       this.trigger("sfxToggle")
     })
 
+    const fxVolumeSlider = document.getElementById("fxVolumeSlider")
+    fxVolumeSlider.addEventListener("input", (event) => {
+      const newVolume = parseFloat(event.target.value)
+      this.sfxSounds.forEach((sound) => {
+        sound.setVolume(newVolume)
+      })
+
+      this.trigger("sfxVolumeChange")
+      this.currentSfxVolume = newVolume
+    })
+
+    // Music Sound Button
     const musicBtn = document.getElementById("musicToggle")
     musicBtn.textContent = this.musicToggle ? "🎵" : "❌"
 
@@ -35,14 +49,32 @@ export default class Sounds extends EventEmitter {
 
       this.trigger("musicToggle")
     })
+
+    const musicVolumeSlider = document.getElementById("musicVolumeSlider")
+    musicVolumeSlider.addEventListener("input", (event) => {
+      const newVolume = parseFloat(event.target.value)
+      this.musicSounds.forEach((sound) => {
+        sound.setVolume(newVolume)
+      })
+    })
+
+    this.sfxSounds = [] // Array to hold sound objects
+    this.musicSounds = [] // Array to hold music objects
   }
 
-  createSound(path) {
+  createSound(path, loop = false, isMusic = false) {
     const sound = new THREE.Audio(this.listener)
     this.audioLoader.load(path, (buffer) => {
       sound.setBuffer(buffer)
-      sound.setVolume(0.1)
+      sound.setLoop(loop)
+      sound.setVolume(0.5)
     })
+
+    if (isMusic) {
+      this.musicSounds.push(sound) // Add sound to the array
+    } else {
+      this.sfxSounds.push(sound) // Add sound to the array
+    }
     return sound
   }
 

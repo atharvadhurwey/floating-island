@@ -119,7 +119,11 @@ export default class Player {
   setSounds() {
     const path = "./audio/fellowship.mp3"
     this.musicToggle = this.sounds.musicToggle // Music toggle
-    this.backgroundMusic = this.sounds.createSound(path)
+
+    const isLoop = true // Loop
+    const isMusic = true // Music
+
+    this.backgroundMusic = this.sounds.createSound(path, isLoop, isMusic) // Music
     this.sounds.on("musicToggle", () => {
       this.musicToggle = !this.musicToggle
       if (this.musicToggle) {

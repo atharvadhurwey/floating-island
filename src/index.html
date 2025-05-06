@@ -48,8 +48,20 @@
     </div>
     <div id="soundControls">
       <div class="sound-label">Sounds</div>
-      <button id="musicToggle" title="Toggle background music" aria-label="Toggle background music" tabindex="-1">🔇</button>
-      <button id="fxToggle" title="Toggle sound effects" aria-label="Toggle sound effects" tabindex="-1">💫</button>
+
+      <div class="sound-group">
+        <button id="musicToggle" title="Toggle background music" aria-label="Toggle background music" tabindex="-1">🔇</button>
+        <div class="slider-container">
+          <input type="range" id="musicVolumeSlider" min="0" max="1" step="0.01" value="0.5" />
+        </div>
+      </div>
+
+      <div class="sound-group">
+        <button id="fxToggle" title="Toggle sound effects" aria-label="Toggle sound effects" tabindex="-1">💫</button>
+        <div class="slider-container">
+          <input type="range" id="fxVolumeSlider" min="0" max="1" step="0.01" value="0.5" />
+        </div>
+      </div>
     </div>
     <script type="module" src="./script.js"></script>
   </body>

@@ -198,9 +198,13 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
 
   setSounds() {
     const path = "./audio/footsteps.mp3"
+    this.sfxVolume = 0.5 // Default volume for sound effects
     this.sfxToggle = this.sounds.sfxToggle // Sound effects toggle
     this.sounds.on("sfxToggle", () => {
       this.sfxToggle = !this.sfxToggle
+    })
+    this.sounds.on("sfxVolumeChange", () => {
+      this.sfxVolume = this.sounds.currentSfxVolume
     })
     this.footstepSound = this.sounds.createSound(path)
   }
@@ -243,7 +247,7 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
     if (this.sfxToggle) {
       if (!this.wasInAir && isMoving) {
         if (!this.footstepSound.isPlaying && this.footstepSound.buffer) {
-          this.footstepSound.setVolume(0.1) // Restore full volume
+          this.footstepSound.setVolume(this.sfxVolume) // Restore full volume
           this.footstepSound.play()
         }
       } else {

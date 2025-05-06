@@ -40,6 +40,42 @@ body {
   font-size: 60px;
 }
 
+.sound-group {
+  position: relative;
+  display: inline-block;
+}
+
+.slider-container {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.8);
+  border-radius: 10px;
+  display: none;
+}
+
+.slider-container input[type="range"] {
+  width: 100%;
+}
+
+.sound-group:hover .slider-container {
+  display: block;
+}
+
+.slider-container::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 6px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+}
+
 #soundControls {
   position: fixed;
   bottom: 20px;
