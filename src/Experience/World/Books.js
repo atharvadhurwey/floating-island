@@ -7,6 +7,7 @@ export default class Books {
     this.resources = this.experience.resources
     this.scene = this.experience.scene
     this.camera = this.experience.camera.instance
+    this.sounds = this.experience.sounds
     this.debug = this.experience.debug
 
     this.books = [] // Array to hold all book sprites
@@ -159,8 +160,24 @@ export default class Books {
       console.log(book.text)
     }
 
+    if (this.sfxToggle) {
+      if (this.loreSound.isPlaying) this.loreSound.stop()
+      this.loreSound.play()
+    }
+
     this.createLoreSprite(book.text, playerBodyPosition)
   }
+
+  setSounds() {
+    const path = "/audio/bookCollect.mp3"
+    this.sfxToggle = this.sounds.sfxToggle // Sound effects toggle
+    this.sounds.on("sfxToggle", () => {
+      this.sfxToggle = !this.sfxToggle
+    })
+    this.loreSound = this.sounds.createSound(path)
+  }
+
+  updateSounds() {}
 
   update(playerBodyPosition) {
     const time = Date.now() * 0.002

@@ -40,10 +40,28 @@ body {
   font-size: 60px;
 }
 
-#musicToggle {
+#soundControls {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  text-align: center;
+  z-index: 1000;
+  opacity: 0;
+  display: none; /* Make it visible when ready */
+}
+
+.sound-label {
+  color: white;
+  font-size: 14px;
+  margin-bottom: 5px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 4px 8px;
+  border-radius: 12px;
+  display: inline-block;
+}
+
+#musicToggle,
+#fxToggle {
   padding: 10px 12px;
   font-size: 24px;
   border: none;
@@ -51,19 +69,13 @@ body {
   background: rgba(0, 0, 0, 0.6);
   color: white;
   cursor: pointer;
-  z-index: 1000;
-
-  opacity: 0;
-  display: none;
-
   outline: none;
+  margin: 0 5px;
+  transition: background 0.2s ease;
 }
 
-#musicToggle:focus {
-  outline: none;
-}
-
-#musicToggle:hover {
+#musicToggle:hover,
+#fxToggle:hover {
   background: rgba(0, 0, 0, 0.8);
 }
 

@@ -12,6 +12,7 @@ import Stats from "three/examples/jsm/libs/stats.module.js"
 
 import sources from "./sources.js"
 import Books from "./World/Books.js"
+import Sounds from "./Utils/Sounds.js"
 
 let instance = null
 
@@ -37,6 +38,7 @@ export default class Experience {
     this.camera = new Camera()
     this.renderer = new Renderer()
     this.resources = new Resources(sources)
+    this.sounds = new Sounds()
     this.world = new World()
     this.books = new Books()
     this.physicsWorld = new CANNON.World()

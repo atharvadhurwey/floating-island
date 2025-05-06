@@ -13,7 +13,7 @@ export default class Player {
     this.resources = this.experience.resources
     this.camera = this.experience.camera.instance
     this.physicsWorld = this.experience.physicsWorld
-    // this.controls = this.experience.camera.controls
+    this.sounds = this.experience.sounds
     this.debug = this.experience.debug
 
     this.setLights()
@@ -108,6 +108,7 @@ export default class Player {
   setPointerLockCannonControls() {
     this.controls = new PointerLockControlsCannon(this.camera, this.sphereBody)
     this.scene.add(this.controls.getObject())
+    this.controls.setSounds()
   }
 
   setTime() {
@@ -116,32 +117,16 @@ export default class Player {
   }
 
   setSounds() {
-    // adding audio
-    const listener = new THREE.AudioListener()
-    this.camera.add(listener)
-
-    const sound = new THREE.Audio(listener)
-
-    const audioLoader = new THREE.AudioLoader()
-    audioLoader.load("/audio/fellowship.mp3", function (buffer) {
-      sound.setBuffer(buffer)
-      sound.setLoop(true)
-      sound.setVolume(0.1)
-
-      const btn = document.getElementById("musicToggle")
-
-      let isPlaying = false
-
-      btn.addEventListener("click", () => {
-        if (isPlaying) {
-          sound.pause()
-          btn.textContent = "🔇"
-        } else {
-          sound.play()
-          btn.textContent = "🔊"
-        }
-        isPlaying = !isPlaying
-      })
+    const path = "./audio/fellowship.mp3"
+    this.musicToggle = this.sounds.musicToggle // Music toggle
+    this.backgroundMusic = this.sounds.createSound(path)
+    this.sounds.on("musicToggle", () => {
+      this.musicToggle = !this.musicToggle
+      if (this.musicToggle) {
+        this.backgroundMusic.play()
+      } else {
+        this.backgroundMusic.pause()
+      }
     })
   }
 
@@ -207,16 +192,6 @@ export default class Player {
                 side: THREE.DoubleSide, // Important: allows objects behind to render
               })
             }
-
-            // if (child.name == "hiders") {
-            //   child.material = new THREE.MeshBasicMaterial({
-            //     color: 0x000000,
-            //     side: THREE.DoubleSide, // Important: allows objects behind to render
-            //   })
-            // }
-            // if (child.name.startsWith("hiders_")) {
-            //   child.visible = false // Hide the collider mesh if you want
-            // }
           }
         }
       })
@@ -266,6 +241,7 @@ export default class Player {
 
   placeBooks() {
     this.books = this.experience.books
+    this.books.setSounds()
 
     const book = [
       // {
@@ -324,22 +300,22 @@ export default class Player {
     instructions.style.opacity = "1"
     instructions.style.display = "flex"
 
-    const musicToggle = document.getElementById("musicToggle")
-    musicToggle.style.opacity = "1"
-    musicToggle.style.display = "inline-block"
+    const soundControls = document.getElementById("soundControls")
+    soundControls.style.display = "inline-block"
+    soundControls.style.opacity = "1"
 
     instructions.addEventListener("click", () => this.controls.lock())
 
     this.controls.addEventListener("lock", () => {
       this.controls.enabled = true
       instructions.style.display = "none"
-      musicToggle.style.display = "none"
+      soundControls.style.display = "none"
     })
 
     this.controls.addEventListener("unlock", () => {
       this.controls.enabled = false
       instructions.style.display = "flex"
-      musicToggle.style.display = "inline-block"
+      soundControls.style.display = "inline-block"
     })
   }
 

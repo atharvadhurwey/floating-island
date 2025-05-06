@@ -1,5 +1,6 @@
 import * as THREE from "three"
 import * as CANNON from "cannon-es"
+import Experience from "../Experience"
 
 /**
  * @author mrdoob / http://mrdoob.com/
@@ -8,6 +9,9 @@ import * as CANNON from "cannon-es"
 class PointerLockControlsCannon extends THREE.EventDispatcher {
   constructor(camera, cannonBody) {
     super()
+
+    this.experience = new Experience()
+    this.sounds = this.experience.sounds
 
     this.enabled = false
 
@@ -32,6 +36,9 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
     this.moveRight = false
 
     this.canJump = false
+    this.airTime = 0
+    this.wasInAir = false
+    this.walkTime = 0
 
     const contactNormal = new CANNON.Vec3() // Normal in the contact, pointing *out* of whatever the player touched
     const upAxis = new CANNON.Vec3(0, 1, 0)
@@ -189,6 +196,15 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
     return vector
   }
 
+  setSounds() {
+    const path = "./audio/footsteps.mp3"
+    this.sfxToggle = this.sounds.sfxToggle // Sound effects toggle
+    this.sounds.on("sfxToggle", () => {
+      this.sfxToggle = !this.sfxToggle
+    })
+    this.footstepSound = this.sounds.createSound(path)
+  }
+
   update(delta) {
     if (this.enabled === false) {
       return
@@ -199,13 +215,42 @@ class PointerLockControlsCannon extends THREE.EventDispatcher {
 
     this.inputVelocity.set(0, 0, 0)
 
-    // if (this.canJump && (this.moveForward || this.moveBackward || this.moveLeft || this.moveRight)) {
-    //   this.velocity.y += this.velocityFactor * delta // tweak this value depending on your stair height
-    // }
-
     if (!this.moveForward && !this.moveBackward && !this.moveLeft && !this.moveRight) {
       this.velocity.x *= 0.9
       this.velocity.z *= 0.9
+    }
+
+    const vY = this.velocity.y
+    const isMoving = this.moveForward || this.moveBackward || this.moveLeft || this.moveRight
+
+    // Check if player is in air based on Y velocity
+    if (vY > 1 || vY < -1) {
+      this.airTime += delta
+      this.walkTime = 0 // reset walk timer when airborne
+      this.wasInAir = true
+    } else {
+      if (isMoving) {
+        this.walkTime += delta
+        if (this.walkTime > 10) {
+          this.airTime = 0
+          this.wasInAir = false
+        }
+      } else {
+        this.walkTime = 0
+      }
+    }
+
+    if (this.sfxToggle) {
+      if (!this.wasInAir && isMoving) {
+        if (!this.footstepSound.isPlaying && this.footstepSound.buffer) {
+          this.footstepSound.setVolume(0.1) // Restore full volume
+          this.footstepSound.play()
+        }
+      } else {
+        if (this.footstepSound.isPlaying) {
+          this.sounds.fadeOutSound(this.footstepSound, 100) // smooth fade out
+        }
+      }
     }
 
     if (this.canJump && this.velocity.y === 0) {
